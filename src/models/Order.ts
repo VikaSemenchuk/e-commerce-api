@@ -11,7 +11,7 @@ const orderItemSchema = new Schema(
     price: {
       type: Number,
       required: [true, "Product's price is required"],
-      min: [1, "Product's price must be positive"],
+      min: [0, "Product's price must be positive"],
     },
     quantity: {
       type: Number,
@@ -46,11 +46,8 @@ const orderSchema = new Schema(
     total: {
       type: Number,
       required: [true, "Total is required"],
-      min: [1, "Total must be positive"],
-      validate: {
-        validator: Number.isInteger,
-        message: "Product's ttotal must be an integer",
-      },
+      min: [0, "Total must be positive"],
+     
     },
   },
   {
