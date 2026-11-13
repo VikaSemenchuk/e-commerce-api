@@ -40,6 +40,16 @@ export const errorHandler: ErrorRequestHandler = (error, _req, res, next) => {
     return;
   }
 
+  if (
+    error instanceof mongoose.mongo.MongoServerError &&
+    error.code === 11000
+  ) {
+    res
+      .status(409)
+      .json({ message: "Resource with such value already exists" });
+    return;
+  }
+
   if (error instanceof Error && "type" in error) {
     switch (error.type) {
       case "entity.parse.failed":
