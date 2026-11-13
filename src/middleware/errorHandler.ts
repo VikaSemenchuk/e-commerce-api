@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import type { ErrorRequestHandler } from "express";
-import { HttpError, NotFoundError } from "#errors";
 import { ZodError } from "zod";
+
+import { HttpError, NotFoundError } from "#errors";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -11,19 +12,19 @@ export const errorHandler: ErrorRequestHandler = (error, _req, res, next) => {
     return;
   }
 
-    if (error instanceof NotFoundError || error instanceof HttpError) { 
-        res.status(error.status).json({ message: error.message });
-        return;
-    }
+  if (error instanceof NotFoundError || error instanceof HttpError) {
+    res.status(error.status).json({ message: error.message });
+    return;
+  }
 
-   if (error instanceof ZodError) {
-     res.status(400).json({
-       message: error.issues
-         .map((i) => `${i.path.join(".")}: ${i.message}`)
-         .join("; "),
-     });
-     return;
-   }
+  if (error instanceof ZodError) {
+    res.status(400).json({
+      message: error.issues
+        .map((i) => `${i.path.join(".")}: ${i.message}`)
+        .join("; "),
+    });
+    return;
+  }
 
   if (error instanceof mongoose.Error.CastError) {
     res.status(400).json({ message: `Invalid ${error.path}: ${error.value}` });
