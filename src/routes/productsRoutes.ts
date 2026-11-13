@@ -13,6 +13,7 @@ const productsRoutes = Router();
 
 productsRoutes.get("/", getAllProducts);
 //! Products filter by category
+
 productsRoutes.post("/", validateBody(productSchema), createProduct);
 productsRoutes.get("/:id", validateParams(idParamsSchema), getProductById);
 productsRoutes.put(
@@ -21,6 +22,8 @@ productsRoutes.put(
   validateBody(productSchema),
   updateProduct,
 );
+
+
 productsRoutes.delete("/:id", validateParams(idParamsSchema), deleteProduct);
 
 export default productsRoutes;
