@@ -3,6 +3,15 @@ import mongoose from "mongoose";
 const MONGO_URI = process.env.MONGO_URI;
 const DB_NAME = process.env.DB_NAME;
 
+mongoose.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: (_doc, ret) => {
+   const { _id, ...rest } = ret;
+   return rest; 
+  },
+});
+
 try {
   if (!MONGO_URI) throw new Error("MONGO_URI is not defined");
   if (!DB_NAME) throw new Error("DB_NAME is not defined");
