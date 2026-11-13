@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import type { CategoryInputType, IdParamsType } from "#schemas";
 import { Category } from "#models";
-import {  NotFoundError } from "#errors";
+import { NotFoundError } from "#errors";
 
 // #GET /categories
 export const getCategoriesList: RequestHandler = async (req, res) => {
@@ -38,7 +38,7 @@ export const updateCategory: RequestHandler<
   const { body } = req;
   const updatedCategory = await Category.findByIdAndUpdate(id, body, {
     returnDocument: "after",
-    validator: true,
+    runValidators: true,
   });
   if (!updatedCategory) throw new NotFoundError("Category");
 
