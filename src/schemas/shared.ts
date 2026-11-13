@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const idSchema = z
-  .string()
+  .string({ error: "ID is required" })
   .regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid ID format" });
 
 export const idParamsSchema = z.object({

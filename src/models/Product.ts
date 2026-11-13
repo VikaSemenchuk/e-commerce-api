@@ -13,10 +13,10 @@ const productSchema = new Schema(
       required: [true, "Price is required"],
       min: [0, "Price must be positive"],
     },
-    category: {
+    categoryId: {
       type: Schema.Types.ObjectId,
       ref: "Category",
-      required: [true, "Category name is required"],
+      required: [true, "Category ID is required"],
       index: true,
     },
   },
