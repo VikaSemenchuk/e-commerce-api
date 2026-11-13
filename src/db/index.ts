@@ -7,8 +7,8 @@ mongoose.set("toJSON", {
   virtuals: true,
   versionKey: false,
   transform: (_doc, ret) => {
-   const { _id, ...rest } = ret;
-   return rest; 
+    const { _id, ...rest } = ret;
+    return rest;
   },
 });
 
@@ -20,8 +20,7 @@ try {
     dbName: DB_NAME,
   });
 
-    console.log(`\x1b[35mMongoDB connected via Mongoose\x1b[0m`);
-  
+  console.log(`\x1b[35mMongoDB connected via Mongoose\x1b[0m`);
 } catch (err) {
   console.error("Error connecting to MongoDB:", err);
   process.exit(1);

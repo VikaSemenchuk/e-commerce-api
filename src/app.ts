@@ -6,7 +6,6 @@ import { categoryRoutes, testRouter } from "#routes";
 import { NotFoundError } from "#errors";
 import { errorHandler } from "#middleware";
 
-
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -16,9 +15,9 @@ app.use(express.json());
 app.use("/categories", categoryRoutes);
 app.use("/error", testRouter);
 
-app.use((_req, _res, next) => { 
-next(new NotFoundError("Route"))
-})
+app.use((_req, _res, next) => {
+  next(new NotFoundError("Route"));
+});
 
 app.use(errorHandler);
 
