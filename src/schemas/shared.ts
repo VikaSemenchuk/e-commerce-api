@@ -6,4 +6,6 @@ export const idParamsSchema = z.object({
   id: idSchema,
 });
 
+export type IdParamsType = z.infer<typeof idParamsSchema>;
+
 // export const nameSchema = z.string().trim().min(1, { message: "Name is required" });

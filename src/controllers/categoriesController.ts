@@ -1,22 +1,57 @@
 import type { RequestHandler } from "express";
+import type { CategoryInputType, IdParamsType } from "#schemas";
+import { Category } from "#models";
+import { HttpError } from "#errors";
 
-export const getCategoriesList: RequestHandler = async (req, res) => { 
-    res.json({ message: "Get categories list" });
-}
-export const createCategory: RequestHandler = async (req, res) => { 
-    res.json({ message: "Create category" });
-}
 
-export const getCategoryById: RequestHandler = async (req, res) => {
-  res.json({ message: "Get category by ID" });
+// #GET /categories
+export const getCategoriesList: RequestHandler = async (req, res) => {
+  const categories = await Category.find();
+  res.status(200).json(categories);
 };
-export const updateCategory: RequestHandler = async (req, res) => { 
-    console.log(req.body)
-    res.json({ message: "Update category" });
+// #POST /categories
+export const createCategory: RequestHandler<
+  {},
+  unknown,
+  CategoryInputType
+> = async (req, res) => {
+  const { body } = req;
+  const newCategory = await Category.create(body);
+  res.status(201).json(newCategory);
+};
+// #GET /categories/:id
+export const getCategoryById: RequestHandler<IdParamsType> = async (
+  req,
+  res,
+) => {
+  const { id } = req.params;
+  const category = await Category.findById(id);
+  if (!category) throw new HttpError(404, `Category not found`);
+  res.status(200).json(category);
+};
+// #PUT /categories/:id
+export const updateCategory: RequestHandler<
+  IdParamsType,
+  unknown,
+  CategoryInputType
+> = async (req, res) => {
+  const { id } = req.params;
+  const { body } = req;
+  const updatedCategory = await Category.findByIdAndUpdate(id, body, {
+    returnDocument: "after",
+    validator: true,
+  });
+  if (!updatedCategory) throw new HttpError(404, `Category not found`);
 
-}
-export const deleteCategory: RequestHandler = async (req, res) => { 
-    console.log(req.body)
-    res.json({ message: "Delete category" });
-}
-
+  res.status(200).json(updatedCategory);
+};
+// #DELETE /categories/:id
+export const deleteCategory: RequestHandler<IdParamsType> = async (
+  req,
+  res,
+) => {
+  const { id } = req.params;
+  const deletedCategory = await Category.findByIdAndDelete(id);
+  if (!deletedCategory) throw new HttpError(404, `Category not found`);
+  res.status(200).json(deletedCategory);
+};
