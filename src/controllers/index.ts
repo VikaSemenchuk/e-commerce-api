@@ -1,1 +1,1 @@
-export * from "./categoryController.ts"
+export * from "./categoriesController.ts"

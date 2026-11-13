@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-export const idSchema = z.string().regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid ID format: 24 symbols required" });
+export const idSchema = z.string().regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid ID format" });
 
-export const paramsSchema = z.object({
+export const idParamsSchema = z.object({
   id: idSchema,
 });
 
