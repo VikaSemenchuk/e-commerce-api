@@ -5,14 +5,13 @@ import {
   getProductById,
   updateProduct,
 } from "#controllers";
-import { validateBody, validateParams } from "#middleware";
-import { idParamsSchema, productSchema } from "#schemas";
+import { validateBody, validateParams, validateQuery } from "#middleware";
+import { idParamsSchema, productQuerySchema, productSchema } from "#schemas";
 import { Router } from "express";
 
 const productsRoutes = Router();
 
-productsRoutes.get("/", getAllProducts);
-//! Products filter by category
+productsRoutes.get("/", validateQuery(productQuerySchema), getAllProducts);
 
 productsRoutes.post("/", validateBody(productSchema), createProduct);
 productsRoutes.get("/:id", validateParams(idParamsSchema), getProductById);
@@ -22,7 +21,6 @@ productsRoutes.put(
   validateBody(productSchema),
   updateProduct,
 );
-
 
 productsRoutes.delete("/:id", validateParams(idParamsSchema), deleteProduct);
 

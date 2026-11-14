@@ -25,3 +25,15 @@ export const validateParams = (schema: ZodType): RequestHandler => {
     next();
   };
 };
+
+export const validateQuery = (schema: ZodType): RequestHandler => {
+  return (req, _res, next) => {
+    const result = schema.safeParse(req.query);
+
+    if (!result.success) {
+      next(result.error);
+      return;
+    }
+    next();
+  };
+};

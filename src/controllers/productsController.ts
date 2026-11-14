@@ -1,11 +1,19 @@
+import type { RequestHandler } from "express";
+import type { IdParamsType, ProductInputType } from "#schemas";
 import { NotFoundError, HttpError } from "#errors";
 import { Product, Category } from "#models";
-import type { IdParamsType, ProductInputType } from "#schemas";
-import type { RequestHandler } from "express";
 
 //# GET /products
 export const getAllProducts: RequestHandler = async (req, res) => {
-  const products = await Product.find();
+  const { categoryId, name } = req.query;
+
+  const filter: Record<string, unknown> = {};
+
+  if (categoryId) filter.categoryId = categoryId;
+  if (name) filter.name = name; // ! make text-filter flexible
+
+  const products = await Product.find(filter);
+
   res.status(200).json(products);
 };
 

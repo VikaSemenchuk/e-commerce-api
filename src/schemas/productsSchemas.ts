@@ -16,4 +16,8 @@ export const productSchema = z.strictObject({
   categoryId: idSchema,
 });
 
+export const productQuerySchema = z.object({
+    categoryId: idSchema.optional(),
+})
+
 export type ProductInputType = z.infer<typeof productSchema>;
