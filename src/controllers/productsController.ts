@@ -24,9 +24,10 @@ export const createProduct: RequestHandler<
   ProductInputType
 > = async (req, res) => {
   const { body } = req;
-  const newProduct = await Product.create(body);
-  const categoryExists = await Category.exists({ _id: newProduct.categoryId });
+  const categoryExists = await Category.exists({ _id: body.categoryId });
   if (!categoryExists) throw new HttpError(400, "Category does not exist");
+
+  const newProduct = await Product.create(body);
   res.status(201).json(newProduct);
 };
 
@@ -50,17 +51,18 @@ export const updateProduct: RequestHandler<
 > = async (req, res) => {
   const { id } = req.params;
   const { body } = req;
+  const categoryExists = await Category.exists({
+    _id: body.categoryId,
+  });
+
+  if (!categoryExists) throw new HttpError(400, "Category does not exist");
+
   const updatedProduct = await Product.findByIdAndUpdate(id, body, {
     returnDocument: "after",
     runValidators: true,
   });
 
   if (!updatedProduct) throw new NotFoundError("Product");
-  const categoryExists = await Category.exists({
-    _id: updatedProduct.categoryId,
-  });
-
-  if (!categoryExists) throw new HttpError(400, "Category does not exist");
 
   res.status(200).json(updatedProduct);
 };
