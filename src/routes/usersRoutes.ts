@@ -1,21 +1,14 @@
+import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "#controllers";
+import { validateBody, validateParams } from "#middleware";
+import { idParamsSchema, userSchema, userUpdateSchema } from "#schemas";
 import { Router } from "express"
 
 const usersRoutes = Router()
 
-usersRoutes.get("/", (req, res) => { 
-    res.json("Users get")
-})
-usersRoutes.post("/", (req, res) => { 
-    res.json("Users post")
-})
-usersRoutes.get("/:id", (req, res) => { 
-    res.json("Users get by ID")
-})
-usersRoutes.put("/:id", (req, res) => { 
-    res.json("Users put")
-})
-usersRoutes.delete("/:id", (req, res) => { 
-    res.json("Users delete")
-})
+usersRoutes.get("/", getAllUsers)
+usersRoutes.post("/", validateBody(userSchema), createUser)
+usersRoutes.get("/:id", validateParams(idParamsSchema), getUserById)
+usersRoutes.put("/:id", validateParams(idParamsSchema), validateBody(userUpdateSchema), updateUser);
+usersRoutes.delete("/:id", validateParams(idParamsSchema), deleteUser);
 
 export default usersRoutes;
