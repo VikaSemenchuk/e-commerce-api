@@ -2,7 +2,13 @@ import "#db";
 import express from "express";
 import cors from "cors";
 
-import { categoriesRoutes, productsRoutes, testRouter, usersRoutes } from "#routes";
+import {
+  categoriesRoutes,
+  productsRoutes,
+  usersRoutes,
+  ordersRoutes,
+  testRouter,
+} from "#routes";
 import { NotFoundError } from "#errors";
 import { errorHandler } from "#middleware";
 
@@ -14,7 +20,8 @@ app.use(express.json());
 
 app.use("/categories", categoriesRoutes);
 app.use("/products", productsRoutes);
-app.use("/users", usersRoutes)
+app.use("/users", usersRoutes);
+app.use("/orders", ordersRoutes);
 app.use("/error", testRouter);
 
 app.use((_req, _res, next) => {
