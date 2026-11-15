@@ -43,7 +43,8 @@
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "node --env-file=.env.production dist/app.js"
+    "start": "node dist/app.js",
+    "start:prod-local": "npm run build && node --env-file=.env.production dist/app.js"
   },
   "keywords": [],
   "type": "module",
