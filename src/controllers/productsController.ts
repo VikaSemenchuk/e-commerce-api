@@ -5,12 +5,13 @@ import { Product, Category } from "#models";
 
 //# GET /products
 export const getAllProducts: RequestHandler = async (req, res) => {
-  const { categoryId, name } = req.query;
+  const { categoryId } = req.query;
+  // const { categoryId, name } = req.query;
 
   const filter: Record<string, unknown> = {};
 
   if (categoryId) filter.categoryId = categoryId;
-  if (name) filter.name = name; // ! make text-filter flexible
+  // if (name) filter.name = name; // ! make text-filter flexible
 
   const products = await Product.find(filter);
 
