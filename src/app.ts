@@ -2,7 +2,7 @@ import "#db";
 import express from "express";
 import cors from "cors";
 
-import { categoryRoutes, productRoutes, testRouter } from "#routes";
+import { categoriesRoutes, productsRoutes, testRouter, usersRoutes } from "#routes";
 import { NotFoundError } from "#errors";
 import { errorHandler } from "#middleware";
 
@@ -12,8 +12,9 @@ const port = process.env.PORT || 3000;
 app.use(cors({ origin: process.env.CORS_ORIGIN?.split(",") ?? "*" }));
 app.use(express.json());
 
-app.use("/categories", categoryRoutes);
-app.use("/products", productRoutes);
+app.use("/categories", categoriesRoutes);
+app.use("/products", productsRoutes);
+app.use("/users", usersRoutes)
 app.use("/error", testRouter);
 
 app.use((_req, _res, next) => {
