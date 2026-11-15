@@ -9,7 +9,7 @@ export const userSchema = z.strictObject({
   email: z.string().trim().toLowerCase().pipe(z.email("Invalid email format")),
   password: z
     .string()
-    .trim()
+    .regex(/^\S+$/, "Password must not contain spaces")
     .min(8, "Password must be at least 8 characters long")
     .max(72, "Password is too long"),
 });

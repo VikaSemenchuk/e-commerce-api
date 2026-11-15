@@ -27,6 +27,7 @@ export const createUser: RequestHandler<{}, unknown, UserInputType> = async (
 export const getUserById: RequestHandler<IdParamsType> = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);
+  if (!user) throw new NotFoundError("User");
   res.status(200).json(user);
 };
 
@@ -50,15 +51,15 @@ export const updateUser: RequestHandler<
   res.status(200).json(updatedUser);
 };
 
-// # PUT by Id
+// # Delete by Id
 export const deleteUser: RequestHandler<IdParamsType> = async (req, res) => {
   const { id } = req.params;
 
-  const hasOrder = await Order.exists({ _id: id });
+  const hasOrder = await Order.exists({ userId: id });
   if (hasOrder)
     throw new HttpError(409, "User has orders and cannot be deleted");
 
-  const deleteUser = await User.findByIdAndDelete(id);
-  if (!deleteUser) throw new NotFoundError("User");
-  res.status(200).json(deleteUser);
+  const deletedUser = await User.findByIdAndDelete(id);
+  if (!deletedUser) throw new NotFoundError("User");
+  res.status(200).json(deletedUser);
 };
