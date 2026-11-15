@@ -9,17 +9,17 @@ import {
 import { validateBody, validateParams } from "#middleware";
 import { categorySchema, idParamsSchema } from "#schemas";
 
-const categoryRoutes = Router();
+const categoriesRoutes = Router();
 
-categoryRoutes.get("/", getCategoriesList);
-categoryRoutes.post("/", validateBody(categorySchema), createCategory);
-categoryRoutes.get("/:id", validateParams(idParamsSchema), getCategoryById);
-categoryRoutes.put(
+categoriesRoutes.get("/", getCategoriesList);
+categoriesRoutes.post("/", validateBody(categorySchema), createCategory);
+categoriesRoutes.get("/:id", validateParams(idParamsSchema), getCategoryById);
+categoriesRoutes.put(
   "/:id",
   validateParams(idParamsSchema),
   validateBody(categorySchema),
   updateCategory,
 );
-categoryRoutes.delete("/:id", validateParams(idParamsSchema), deleteCategory);
+categoriesRoutes.delete("/:id", validateParams(idParamsSchema), deleteCategory);
 
-export default categoryRoutes;
+export default categoriesRoutes;
