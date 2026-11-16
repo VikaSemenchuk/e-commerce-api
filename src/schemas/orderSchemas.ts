@@ -25,3 +25,4 @@ export const orderQuerySchema = z.strictObject({
 });
 
 export type OrderInputType = z.infer<typeof orderSchema>;
+export type OrderItemType = z.infer<typeof orderItemSchema>;
