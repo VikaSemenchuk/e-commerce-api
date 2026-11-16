@@ -1,7 +1,8 @@
 import type { RequestHandler } from "express";
-import { HttpError, NotFoundError } from "#errors";
-import { Order, Product, User } from "#models";
+
 import { type IdParamsType, type OrderInputType } from "#schemas";
+import { Order, Product, User } from "#models";
+import { HttpError, NotFoundError } from "#errors";
 
 type OrderProductItemType = {
   productId: string;
@@ -58,7 +59,7 @@ const buildOrderData = async (
 };
 
 // # GET
-export const getOrders: RequestHandler<IdParamsType> = async (req, res) => {
+export const getOrders: RequestHandler = async (req, res) => {
   const { userId } = req.query;
 
   const filter: Record<string, unknown> = {};
@@ -114,7 +115,7 @@ export const deleteOrder: RequestHandler<IdParamsType> = async (req, res) => {
 
   const deletedOrder =
     await Order.findByIdAndDelete(id).populate(populateProduct);
-    
+
   if (!deletedOrder) throw new NotFoundError("Order");
 
   res.status(200).json(deletedOrder);

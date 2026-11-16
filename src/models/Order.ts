@@ -32,8 +32,8 @@ orderItemSchema.virtual("currentProduct", {
   ref: "Product",
   localField: "productId",
   foreignField: "_id",
-  justOne: true
-})
+  justOne: true,
+});
 
 const orderSchema = new Schema(
   {
@@ -54,7 +54,6 @@ const orderSchema = new Schema(
       type: Number,
       required: [true, "Total is required"],
       min: [0, "Total must be positive"],
-     
     },
   },
   {

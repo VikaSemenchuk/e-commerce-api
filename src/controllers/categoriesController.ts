@@ -1,4 +1,5 @@
 import type { RequestHandler } from "express";
+
 import type { CategoryInputType, IdParamsType } from "#schemas";
 import { Category, Product } from "#models";
 import { HttpError, NotFoundError } from "#errors";

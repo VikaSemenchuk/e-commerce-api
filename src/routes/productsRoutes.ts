@@ -1,3 +1,6 @@
+import { Router } from "express";
+import { validateBody, validateParams, validateQuery } from "#middleware";
+import { idParamsSchema, productQuerySchema, productSchema } from "#schemas";
 import {
   createProduct,
   deleteProduct,
@@ -5,9 +8,6 @@ import {
   getProductById,
   updateProduct,
 } from "#controllers";
-import { validateBody, validateParams, validateQuery } from "#middleware";
-import { idParamsSchema, productQuerySchema, productSchema } from "#schemas";
-import { Router } from "express";
 
 const productsRoutes = Router();
 
