@@ -8,7 +8,7 @@ const orderItemSchema = new Schema(
       required: [true, "Product's id is required"],
       index: true,
     },
-    price: {
+    priceAtPurchase: {
       type: Number,
       required: [true, "Product's price is required"],
       min: [0, "Product's price must be positive"],
