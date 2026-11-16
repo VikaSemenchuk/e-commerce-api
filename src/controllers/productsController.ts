@@ -71,12 +71,13 @@ export const updateProduct: RequestHandler<
 // # DELETE /products/:id
 export const deleteProduct: RequestHandler<IdParamsType> = async (req, res) => {
   const { id } = req.params;
-  const deletedProduct = await Product.findByIdAndDelete(id);
-
-  if (!deletedProduct) throw new NotFoundError("Product");
 
   const productInOrder = await Order.exists({ "products.productId": id });
-  if (productInOrder) throw new HttpError(409, "Product is used in orders and cannot be deleted");
+  if (productInOrder)
+    throw new HttpError(409, "Product is used in orders and cannot be deleted");
+
+  const deletedProduct = await Product.findByIdAndDelete(id);
+  if (!deletedProduct) throw new NotFoundError("Product");
 
   res.status(200).json(deletedProduct);
 };

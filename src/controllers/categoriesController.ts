@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import type { CategoryInputType, IdParamsType } from "#schemas";
-import { Category } from "#models";
-import { NotFoundError } from "#errors";
+import { Category, Product } from "#models";
+import { HttpError, NotFoundError } from "#errors";
 
 // #GET /categories
 export const getCategoriesList: RequestHandler = async (req, res) => {
@@ -50,7 +50,13 @@ export const deleteCategory: RequestHandler<IdParamsType> = async (
   res,
 ) => {
   const { id } = req.params;
+
+  const hasProduct = await Product.exists({ categoryId: id });
+  if (hasProduct)
+    throw new HttpError(409, "Category has products and cannot be deleted");
+
   const deletedCategory = await Category.findByIdAndDelete(id);
   if (!deletedCategory) throw new NotFoundError("Category");
+
   res.status(200).json(deletedCategory);
 };
