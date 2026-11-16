@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import type { IdParamsType, ProductInputType } from "#schemas";
 import { NotFoundError, HttpError } from "#errors";
-import { Product, Category } from "#models";
+import { Product, Category, Order } from "#models";
 
 //# GET /products
 export const getAllProducts: RequestHandler = async (req, res) => {
@@ -74,5 +74,9 @@ export const deleteProduct: RequestHandler<IdParamsType> = async (req, res) => {
   const deletedProduct = await Product.findByIdAndDelete(id);
 
   if (!deletedProduct) throw new NotFoundError("Product");
+
+  const productInOrder = await Order.exists({ "products.productId": id });
+  if (productInOrder) throw new HttpError(409, "Product is used in orders and cannot be deleted");
+
   res.status(200).json(deletedProduct);
 };
