@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
-import { NotFoundError } from "#errors";
+import { HttpError, NotFoundError } from "#errors";
 import { Order, Product, User } from "#models";
-import { type OrderInputType, type OrderItemType } from "#schemas";
+import { type IdParamsType, type OrderInputType } from "#schemas";
 
 type OrderProductItemType = {
   productId: string;
@@ -21,21 +21,21 @@ const buildOrderData = async (
   const { userId, products } = body;
 
   const userExists = await User.exists({ _id: userId });
-  if (!userExists) throw new NotFoundError("User");
+  if (!userExists) throw new HttpError(400, "User does not exist");
 
-  const ids = products.map((product: OrderItemType) => product.productId);
+  const ids = products.map((product) => product.productId);
   const foundProducts = await Product.find({ _id: { $in: ids } });
 
   const priceById = new Map(
     foundProducts.map((product) => [product._id.toString(), product.price]),
   );
 
-  const items = products.map((product: OrderItemType) => {
+  const items = products.map((product) => {
     const { productId, quantity } = product;
     const priceAtPurchase = priceById.get(productId);
 
     if (priceAtPurchase === undefined)
-      throw new NotFoundError(`Product ${productId}`);
+      throw new HttpError(400, "Product does not exist");
 
     return { productId, quantity, priceAtPurchase };
   });
@@ -52,7 +52,7 @@ const buildOrderData = async (
 };
 
 // # GET
-export const getOrders: RequestHandler = async (req, res) => {
+export const getOrders: RequestHandler<IdParamsType> = async (req, res) => {
   const { userId } = req.query;
 
   const filter: Record<string, unknown> = {};
@@ -62,7 +62,10 @@ export const getOrders: RequestHandler = async (req, res) => {
 };
 
 // # POST
-export const createOrder: RequestHandler = async (req, res) => {
+export const createOrder: RequestHandler<{}, unknown, OrderInputType> = async (
+  req,
+  res,
+) => {
   const orderData = await buildOrderData(req.body);
   const newOrder = await Order.create(orderData);
 
@@ -70,7 +73,7 @@ export const createOrder: RequestHandler = async (req, res) => {
 };
 
 // # GET by ID
-export const getOrderById: RequestHandler = async (req, res) => {
+export const getOrderById: RequestHandler<IdParamsType> = async (req, res) => {
   const { id } = req.params;
 
   const orderById = await Order.findById(id);
@@ -80,7 +83,11 @@ export const getOrderById: RequestHandler = async (req, res) => {
 };
 
 // # PUT
-export const updateOrder: RequestHandler = async (req, res) => {
+export const updateOrder: RequestHandler<
+  IdParamsType,
+  unknown,
+  OrderInputType
+> = async (req, res) => {
   const { id } = req.params;
   const orderData = await buildOrderData(req.body);
 
@@ -95,11 +102,11 @@ export const updateOrder: RequestHandler = async (req, res) => {
 };
 
 // # DELETE
-export const deleteOrder: RequestHandler = async (req, res) => {
-   const { id } = req.params;
+export const deleteOrder: RequestHandler<IdParamsType> = async (req, res) => {
+  const { id } = req.params;
 
-   const deletedOrder = await Order.findByIdAndDelete(id);
-   if (!deletedOrder) throw new NotFoundError("Order");
+  const deletedOrder = await Order.findByIdAndDelete(id);
+  if (!deletedOrder) throw new NotFoundError("Order");
 
-   res.status(200).json(deletedOrder);
+  res.status(200).json(deletedOrder);
 };
