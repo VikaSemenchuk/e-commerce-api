@@ -1,7 +1,8 @@
 import type { RequestHandler } from "express";
-import { HttpError, NotFoundError } from "#errors";
-import { Order, User } from "#models";
+
 import type { IdParamsType, UserInputType, UserUpdateType } from "#schemas";
+import { Order, User } from "#models";
+import { HttpError, NotFoundError } from "#errors";
 
 // # GET /users
 export const getAllUsers: RequestHandler = async (_req, res) => {

@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { validateBody, validateParams } from "#middleware";
+import { categorySchema, idParamsSchema } from "#schemas";
 import {
   createCategory,
   deleteCategory,
@@ -6,8 +8,6 @@ import {
   getCategoryById,
   updateCategory,
 } from "#controllers";
-import { validateBody, validateParams } from "#middleware";
-import { categorySchema, idParamsSchema } from "#schemas";
 
 const categoriesRoutes = Router();
 

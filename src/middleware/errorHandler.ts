@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
 import type { ErrorRequestHandler } from "express";
+import mongoose from "mongoose";
 import { ZodError } from "zod";
 
 import { HttpError, NotFoundError } from "#errors";

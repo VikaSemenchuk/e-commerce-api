@@ -6,7 +6,7 @@ export const idSchema = z
 
 export const idParamsSchema = z.object({
   id: idSchema,
-  name: z.string().trim().optional()
+  name: z.string().trim().optional(),
 });
 
 export type IdParamsType = z.infer<typeof idParamsSchema>;

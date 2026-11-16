@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { idSchema } from "./shared.ts";
 
 export const productSchema = z.strictObject({
@@ -17,7 +18,7 @@ export const productSchema = z.strictObject({
 });
 
 export const productQuerySchema = z.object({
-    categoryId: idSchema.optional(),
-})
+  categoryId: idSchema.optional(),
+});
 
 export type ProductInputType = z.infer<typeof productSchema>;

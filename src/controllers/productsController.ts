@@ -1,7 +1,8 @@
 import type { RequestHandler } from "express";
+
 import type { IdParamsType, ProductInputType } from "#schemas";
-import { NotFoundError, HttpError } from "#errors";
 import { Product, Category, Order } from "#models";
+import { NotFoundError, HttpError } from "#errors";
 
 //# GET /products
 export const getAllProducts: RequestHandler = async (req, res) => {
