@@ -11,7 +11,7 @@ const orderItemSchema = new Schema(
     priceAtPurchase: {
       type: Number,
       required: [true, "Product's price is required"],
-      min: [0, "Product's price must be positive"],
+      min: [0, "Product's price cannot be negative"],
     },
     quantity: {
       type: Number,
@@ -27,6 +27,13 @@ const orderItemSchema = new Schema(
     _id: false,
   },
 );
+
+orderItemSchema.virtual("currentProduct", {
+  ref: "Product",
+  localField: "productId",
+  foreignField: "_id",
+  justOne: true
+})
 
 const orderSchema = new Schema(
   {

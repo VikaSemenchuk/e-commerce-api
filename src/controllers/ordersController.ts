@@ -15,6 +15,12 @@ type OrderOutputType = {
   total: number;
 };
 
+const populateProduct = {
+  path: "products.currentProduct",
+  select: "name description price categoryId",
+  populate: { path: "categoryId", select: "name" },
+};
+
 const buildOrderData = async (
   body: OrderInputType,
 ): Promise<OrderOutputType> => {
@@ -57,7 +63,7 @@ export const getOrders: RequestHandler<IdParamsType> = async (req, res) => {
 
   const filter: Record<string, unknown> = {};
   if (userId) filter.userId = userId;
-  const orders = await Order.find(filter);
+  const orders = await Order.find(filter).populate(populateProduct);
   res.status(200).json(orders);
 };
 
@@ -68,6 +74,7 @@ export const createOrder: RequestHandler<{}, unknown, OrderInputType> = async (
 ) => {
   const orderData = await buildOrderData(req.body);
   const newOrder = await Order.create(orderData);
+  await newOrder.populate(populateProduct);
 
   res.status(201).json(newOrder);
 };
@@ -76,7 +83,7 @@ export const createOrder: RequestHandler<{}, unknown, OrderInputType> = async (
 export const getOrderById: RequestHandler<IdParamsType> = async (req, res) => {
   const { id } = req.params;
 
-  const orderById = await Order.findById(id);
+  const orderById = await Order.findById(id).populate(populateProduct);
   if (!orderById) throw new NotFoundError("Order");
 
   res.status(200).json(orderById);
@@ -94,7 +101,7 @@ export const updateOrder: RequestHandler<
   const updatedOrder = await Order.findByIdAndUpdate(id, orderData, {
     returnDocument: "after",
     runValidators: true,
-  });
+  }).populate(populateProduct);
 
   if (!updatedOrder) throw new NotFoundError("Order");
 
@@ -105,7 +112,9 @@ export const updateOrder: RequestHandler<
 export const deleteOrder: RequestHandler<IdParamsType> = async (req, res) => {
   const { id } = req.params;
 
-  const deletedOrder = await Order.findByIdAndDelete(id);
+  const deletedOrder =
+    await Order.findByIdAndDelete(id).populate(populateProduct);
+    
   if (!deletedOrder) throw new NotFoundError("Order");
 
   res.status(200).json(deletedOrder);
