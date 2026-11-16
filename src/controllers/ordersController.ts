@@ -15,7 +15,7 @@ type OrderOutputType = {
   total: number;
 };
 
-const builtOrderData = async (
+const buildOrderData = async (
   body: OrderInputType,
 ): Promise<OrderOutputType> => {
   const { userId, products } = body;
@@ -63,7 +63,7 @@ export const getOrders: RequestHandler = async (req, res) => {
 
 // # POST
 export const createOrder: RequestHandler = async (req, res) => {
-  const orderData = await builtOrderData(req.body);
+  const orderData = await buildOrderData(req.body);
   const newOrder = await Order.create(orderData);
 
   res.status(201).json(newOrder);
@@ -82,14 +82,14 @@ export const getOrderById: RequestHandler = async (req, res) => {
 // # PUT
 export const updateOrder: RequestHandler = async (req, res) => {
   const { id } = req.params;
-  const orderData = await builtOrderData(req.body);
+  const orderData = await buildOrderData(req.body);
 
   const updatedOrder = await Order.findByIdAndUpdate(id, orderData, {
     returnDocument: "after",
     runValidators: true,
   });
 
-  if (!updateOrder) throw new NotFoundError("Order");
+  if (!updatedOrder) throw new NotFoundError("Order");
 
   res.status(200).json(updatedOrder);
 };
