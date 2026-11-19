@@ -1,6 +1,7 @@
 import "#db";
 import express from "express";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
 
 import {
   categoriesRoutes,
@@ -10,6 +11,7 @@ import {
   testRouter,
 } from "#routes";
 
+import { openApiSpec } from "#docs";
 import { NotFoundError } from "#errors";
 import { errorHandler } from "#middleware";
 
@@ -18,6 +20,8 @@ const port = process.env.PORT || 3000;
 
 app.use(cors({ origin: process.env.CORS_ORIGIN?.split(",") ?? "*" }));
 app.use(express.json());
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
 app.use("/categories", categoriesRoutes);
 app.use("/products", productsRoutes);
