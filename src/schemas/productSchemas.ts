@@ -12,7 +12,7 @@ export const productSchema = z.strictObject({
     .trim()
     .min(1, "Description is required"),
   price: z
-    .number({ error: "Price is required" })
+    .number({ error: "Price must be a number" })
     .min(0, "Price must be positive"),
   categoryId: idSchema,
 });
